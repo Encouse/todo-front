@@ -19,28 +19,24 @@
           <v-text-field
             label="username"
             value="John"
+            outlined
             v-model = 'username'
           ></v-text-field>
           <v-text-field
             label="Password"
             type="password"
+            outlined
             v-model = 'password'
           ></v-text-field>
           <span class="caption grey--text text--darken-1">
-            This is the email you will use to login to your Vuetify account
+            Введите пароль и логин выше
           </span>
         </v-card-text>
       </v-window-item>
 
       <v-window-item :value="2">
         <div class="pa-4 text-center">
-          <v-img
-            class="mb-4"
-            contain
-            height="128"
-            src="https://cdn.vuetifyjs.com/images/logos/v.svg"
-          ></v-img>
-          <h3 class="title font-weight-light mb-2">Welcome to Vuetify</h3>
+          <h3 class="title font-weight-light mb-2">Спасибо что вы с нами!</h3>
           <span class="caption grey--text">Thanks for signing up!</span>
         </div>
       </v-window-item>
@@ -61,9 +57,10 @@
         :disabled="step === 3"
         color="primary"
         depressed
+        outlined
         @click="step++"
       >
-        Next
+        Далее
       </v-btn>
     </v-card-actions>
   </v-card>

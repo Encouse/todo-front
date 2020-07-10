@@ -17,17 +17,19 @@
       <v-window-item :value="1">
         <v-card-text>
           <v-text-field
+            outlined
             label="Username"
             value="john"
             v-model = 'username'
           ></v-text-field>
           <v-text-field
             label="Email"
+            outlined
             value="john@vuetifyjs.com"
             v-model = 'email'
           ></v-text-field>
           <span class="caption grey--text text--darken-1">
-            This is the email you will use to login to your Vuetify account
+            Enter your email and username above
           </span>
         </v-card-text>
       </v-window-item>
@@ -37,27 +39,23 @@
           <v-text-field
             label="Password"
             type="password"
+            outlined
             v-model = 'password'
           ></v-text-field>
           <v-text-field
             label="Confirm Password"
             type="password"
+            outlined
           ></v-text-field>
           <span class="caption grey--text text--darken-1">
-            Please enter a password for your account
+            Введите пароль
           </span>
         </v-card-text>
       </v-window-item>
 
       <v-window-item :value="3">
         <div class="pa-4 text-center">
-          <v-img
-            class="mb-4"
-            contain
-            height="128"
-            src="https://cdn.vuetifyjs.com/images/logos/v.svg"
-          ></v-img>
-          <h3 class="title font-weight-light mb-2">Welcome to Vuetify</h3>
+          <h3 class="title font-weight-light mb-2">Спасибо что вы с нами!</h3>
           <span class="caption grey--text">Thanks for signing up!</span>
         </div>
       </v-window-item>
@@ -80,7 +78,7 @@
         depressed
         @click="step++"
       >
-        Next
+        Далее
       </v-btn>
     </v-card-actions>
   </v-card>
