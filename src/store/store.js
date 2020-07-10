@@ -40,7 +40,7 @@ export default new Vuex.Store({
     login({commit}, user){
         return new Promise((resolve, reject) => {
           commit('auth_request')
-          axios({url: 'http://127.0.0.1:8000/auth/login/', data: user, method: 'POST' })
+          axios({url: 'https://events-api-test.herokuapp.com/auth/login/', data: user, method: 'POST' })
           .then(resp => {
             const token = resp.data.token
             localStorage.setItem('token', token)
@@ -58,7 +58,7 @@ export default new Vuex.Store({
       register({commit}, user){
         return new Promise((resolve, reject) => {
           commit('auth_request')
-          axios({url: 'http://127.0.0.1:8000/auth/register/', data: user, method: 'POST' })
+          axios({url: 'https://events-api-test.herokuapp.com/auth/register/', data: user, method: 'POST' })
           .then(resp => {
             const token = resp.data.Token
             localStorage.setItem('token', token)
@@ -83,7 +83,7 @@ export default new Vuex.Store({
      },
      fetchEvents({commit}) {
        return new Promise((resolve, reject) => {
-         axios({url: 'http://127.0.0.1:8000/events', method: 'GET'})
+         axios({url: 'https://events-api-test.herokuapp.com/events', method: 'GET'})
          .then(res => {
            commit('setItems', res.data.results)
            resolve()
@@ -97,7 +97,7 @@ export default new Vuex.Store({
      changeEvent({commit}, event) {
        return new Promise((resolve, reject) =>{
          console.log(event);
-         axios({url: `http://127.0.0.1:8000/events/${event.id}/`, data: event, method: 'PUT'})
+         axios({url: `https://events-api-test.herokuapp.com/events/${event.id}/`, data: event, method: 'PUT'})
           .then(res => {
             commit('lastChanged', event)
             this.closeOverlay()
@@ -112,7 +112,7 @@ export default new Vuex.Store({
      },
      createEvent({commit}, event) {
        return new Promise((resolve, reject) => {
-         axios({url: `http://127.0.0.1:8000/events/`, data: event, method: 'POST'})
+         axios({url: `https://events-api-test.herokuapp.com/events/`, data: event, method: 'POST'})
           .then(() => {
             commit('lastChanged', event)
             resolve()
@@ -125,7 +125,7 @@ export default new Vuex.Store({
      },
      deleteEvent({commit}, id) {
        return new Promise((resolve, reject) => {
-         axios({url: `http://127.0.0.1:8000/events/${id}/`, method: 'DELETE'})
+         axios({url: `https://events-api-test.herokuapp.com/events/${id}/`, method: 'DELETE'})
           .then(() => {
             commit('eventDeletion')
             resolve()

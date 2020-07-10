@@ -1,14 +1,9 @@
 <template>
   <v-row align="center">
     <v-col>
-      <v-window
-        class="elevation-1"
-        vertical
-      >
-        <v-window-item>
-          <v-card text max-width = '500'>
+          <v-card text max-width = '800'>
             <v-card-title>
-              {{creation ? 'Создать' : 'Редактировать'}}
+              {{'Редактировать'}}
               <v-spacer></v-spacer>
               <v-btn
                 icon
@@ -36,6 +31,7 @@
                   :label="'Событие ' + title"
                   hint="Редактировать событие"
                   placeholder = 'Текст события'
+                  dense
                   outlined
                 ></v-textarea>
                 <v-col>
@@ -52,6 +48,7 @@
                         v-model="date"
                         label="Дата"
                         outlined
+                        dense
                         readonly
                         v-bind="attrs"
                         v-on="on"
@@ -91,7 +88,7 @@
                       ></v-time-picker>
                     </v-menu>
                   </v-col>
-              <div v-if = '!creation' class = 'redact-buttons'>
+              <div v-if = '!create' class = 'redact-buttons'>
                 <v-btn
 
                   @click = 'deleteEvent'
@@ -116,20 +113,28 @@
             </div>
             <div v-else class = 'redact-buttons'>
               <v-btn
+                  v-if = '!created'
                   @click = 'addEvent'
                   fab
                   text
                   outlined
-                  dark
                   small
                 >
-                <v-icon>mdi-plus</v-icon>
+                <v-icon>mdi-content-save-outline</v-icon>
+              </v-btn>
+              <v-btn
+                  v-else
+                  @click = 'closeOverlay'
+                  fab
+                  text
+                  outlined
+                  small
+                >
+                <v-icon>mdi-close</v-icon>
               </v-btn>
             </div>
             </v-card-text>
           </v-card>
-        </v-window-item>
-      </v-window>
     </v-col>
   </v-row>
 </template>
@@ -140,16 +145,13 @@ export default {
   props: {
     item: Object,
     index: [String, Number],
+    create: Boolean,
   },
   mounted() {
-    if (this.item === null) {
-      this.creation = true
-    } else {
     this.text = this.item.text
     this.title = this.item.title
     this.date = this.item.datetime_end.match(/\d{4}-\d{2}-\d{2}/g)[0]
     this.time = this.item.datetime_end.match(/\d{2}:\d{2}/g)[0]
-  }
   },
   data() {
     return {
@@ -161,7 +163,7 @@ export default {
       time: null,
       text: null,
       title: null,
-      creation: false,
+      created: false,
     }
   },
   computed: {
@@ -192,29 +194,24 @@ export default {
     deleteEvent: function() {
       this.$store.dispatch('deleteEvent', this.item.id)
       .then(() => {
-        this.$emit('delete-event', this.index)
         this.$emit('close-overlay')
       })
       .catch(err => {console.log(err.response)})
     },
-    addEvent() {
-      var event = {
-        title: this.title,
+    addEvent: function() {
+      let event = {
         text: this.text,
+        title: this.title,
         datetime_end: this.datetime,
       }
+      this.created = true
       this.$store.dispatch('createEvent', event)
       .then(() => {
-        this.creation = false
-        this.$emit('close-overlay')
-      })
-      .catch((err) => {
-        this.creation = false
-        console.log(err.response);
-        this.$emit('close-overlay')
+        this.$emit('event-created', event)
       })
     },
     closeOverlay() {
+      this.created = false
       this.$emit('close-overlay')
     }
   }

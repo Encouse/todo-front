@@ -1,6 +1,5 @@
 <template>
   <v-data-iterator
-  :key = 'updateCounter'
   :items="items"
   :items-per-page.sync="itemsPerPage"
   :page="page"
@@ -12,7 +11,6 @@
     <template v-slot:header>
       <v-toolbar
         dark
-
         class="mb-1"
       >
         <v-text-field
@@ -20,17 +18,17 @@
           clearable
           flat
           dense
-          solo-inverted
+          outlined
           hide-details
           label = 'Поиск'
         ></v-text-field>
         <template v-if="$vuetify.breakpoint.mdAndUp">
-          <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
           <v-select
             v-model="sortBy"
             flat
             dense
-            solo-inverted
+            outlined
             hide-details
             :items="keys"
             label="Сортировка"
@@ -75,7 +73,7 @@
     <template v-slot:default="props">
       <v-row>
         <v-col
-          v-for="(item, i) in props.items"
+          v-for="item in props.items"
           :key="item.name"
           cols="12"
           sm="6"
@@ -83,11 +81,11 @@
           lg="3"
         >
           <v-card @click = 'openDetailItem(item)'>
-            <v-card-title class="subheading font-weight-bold">{{ item.name }}</v-card-title>
+            <v-card-title class="subheading font-weight-bold">{{ item.title }}</v-card-title>
 
             <v-divider></v-divider>
 
-            <v-list dense>
+            <v-list>
               <v-list-item
                 v-for="(key, index) in filteredKeys"
                 :key="index"
@@ -96,23 +94,24 @@
                   {{ key }}:
                 </v-list-item-content>
 
-                <v-list-item-content class="align-end"
+                <v-list-item-content
+                                    class="align-end"
                                     :class="{ 'blue--text': sortBy === key }">
                                     {{ item[key.toLowerCase()] }}
                                   </v-list-item-content>
               </v-list-item>
             </v-list>
           </v-card>
+        </v-col>
+        <v-col>
           <template>
             <div class="text-center">
               <v-overlay :value="overlay">
                 <ItemWindow
-                @close-overlay = 'closeOverlay'
                  :item = 'detailItem'
-                 :index = 'i'
-                 @event-created = 'eventCreated'
-                 @delete-event = 'deleteEvent'
-                 @event-changed = 'updateEvent'
+                 :create = 'create'
+                 @event-created = 'createEvent'
+                 @close-overlay = 'closeOverlay'
                  />
               </v-overlay>
             </div>
@@ -193,10 +192,28 @@ import ItemWindow from '@/components/windows/ItemWindow'
     mounted() {
       this.getEvnsFromStore()
     },
+    watch: {
+      items() {
+        if (this.items.length === 0) {
+          this.items.push({title: 'Нет евентов!', text: 'Клинкните плюс в правом верхнем углу'})
+        }
+      },
+      filtering(val) {
+        switch(val) {
+          case 'Этот месяц':
+            break
+          case 'Эта неделя':
+            break
+          case 'Этот день':
+            break
+        }
+      }
+    },
     data () {
       return {
         updateCounter: 0,
         overlay: false,
+        create: false,
         detailItem: null,
         newEventTitle: null,
         newEventText: null,
@@ -208,12 +225,18 @@ import ItemWindow from '@/components/windows/ItemWindow'
         sortDesc: false,
         page: 1,
         itemsPerPage: 4,
-        sortBy: 'name',
+        sortBy: 'Title',
         keys: [
           'Title',
           'Text',
           'datetime_end'
         ],
+        filterkeys: [
+          'Этот месяц',
+          'Эта неделя',
+          'Этот день',
+        ],
+        filtering: '',
         items: [],
       }
     },
@@ -224,6 +247,9 @@ import ItemWindow from '@/components/windows/ItemWindow'
       filteredKeys () {
         return this.keys.filter(key => key !== `Name`)
       },
+      filteredItems () {
+        return this.items.map((val) => val.datetime_start)
+      }
     },
     methods: {
       nextPage () {
@@ -243,24 +269,27 @@ import ItemWindow from '@/components/windows/ItemWindow'
       },
       openDetailItem (item) {
         this.detailItem = item
+        this.create = false
         this.overlay = true
       },
       startCreation () {
-        this.detailItem = null
+        this.detailItem = {}
+        this.create = true
         this.overlay = true
       },
-      eventCreated () {
-        this.updateCounter += 1
+      createEvent () {
+        this.create = false
+        this.getEvnsFromStore()
+        this.closeOverlay()
       },
       closeOverlay () {
+        this.create = false
         this.overlay = false
-        this.updateCounter +=1
+        this.getEvnsFromStore()
       },
-      deleteEvent (i) {
-        this.items[i].delete
-      },
-      updateEvent(i, event) {
-        this.items[i] = event
+      updateEvent(i, evn) {
+        console.log('adawddaw');
+        this.items[i] = evn
       }
     },
   }
