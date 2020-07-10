@@ -33,7 +33,7 @@
       <v-toolbar-title>Events</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
-        v-if = "!status === ''"
+        v-if = "token"
         tile
         outlined
         text
@@ -92,6 +92,7 @@
     data: () => ({
       drawer: false,
       status: null,
+      token: localStorage.getItem('token'),
     }),
     created () {
       this.status = this.$store.getters.status

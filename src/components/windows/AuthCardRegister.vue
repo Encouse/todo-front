@@ -101,6 +101,7 @@
        }
        this.$store.dispatch('register', data)
       .then(() => {
+        console.log('registered sucessfully!');
         this.$router.push('/')
       })
       .catch(err => console.log(err))

@@ -140,6 +140,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: 'item-window',
   props: {
@@ -168,8 +169,17 @@ export default {
   },
   computed: {
     datetime: function() {
-      let datetime = `${this.date}T${this.time}:00Z`
-      return datetime
+      let datetime = `${this.date}T${this.time}:00`
+      let dtobj = new Date(datetime)
+      return moment(dtobj).format()
+    }
+  },
+  watch: {
+    date(val) {
+      console.log(val)
+    },
+    time(val) {
+      console.log(val);
     }
   },
   methods: {
