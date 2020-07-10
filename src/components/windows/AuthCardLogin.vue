@@ -4,7 +4,11 @@
     max-width="500"
   >
     <v-card-title class="title font-weight-regular justify-space-between">
-      <span>{{ currentTitle }}</span>
+      <span>{{ currentTitle }} или
+        <span class = 'reg' @click = 'reg'>
+        Зарегистрироваться
+        </span>
+      </span>
       <v-avatar
         color="primary lighten-2"
         class="subheading white--text"
@@ -83,11 +87,14 @@
        .then(() => this.$router.push('/'))
        .catch(err => console.log(err))
      },
+     reg() {
+       this.$emit('register')
+     }
     },
     computed: {
       currentTitle () {
         switch (this.step) {
-          case 1: return 'Sign-up'
+          case 1: return 'Войти'
           default:
             this.login()
             return 'Hello again!'
@@ -97,5 +104,12 @@
   }
 </script>
 
-<style>
+<style scoped>
+.reg {
+  color: green;
+  cursor: pointer;
+}
+.reg:hover {
+  color: cyan;
+}
 </style>

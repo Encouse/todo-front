@@ -110,7 +110,7 @@
     computed: {
       currentTitle () {
         switch (this.step) {
-          case 1: return 'Sign-up'
+          case 1: return 'Register'
           case 2: return 'Create a password'
           default:
             this.register()

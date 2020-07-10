@@ -33,13 +33,33 @@
       <v-toolbar-title>Events</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
+        v-if = "!status === ''"
         tile
         outlined
         text
         @click = 'logout'
       >
-      logout
+      Выход
       </v-btn>
+      <div v-else>
+      <v-btn
+        tile
+        outlined
+        text
+        @click = 'register'
+      >
+      Регистрация
+      </v-btn>
+      <v-btn
+        tile
+        outlined
+        text
+        @click = 'login'
+      >
+      Вход
+      </v-btn>
+    </div>
+
     </v-app-bar>
 
     <v-main>
@@ -71,8 +91,10 @@
     },
     data: () => ({
       drawer: false,
+      status: null,
     }),
     created () {
+      this.status = this.$store.getters.status
     },
     methods: {
       logout() {
@@ -81,6 +103,12 @@
           this.$router.push('/login')
         })
         .catch(err => {console.log(err);})
+      },
+      register() {
+        this.$emit('register')
+      },
+      login() {
+        this.$emit('login')
       }
     }
   }
