@@ -59,6 +59,7 @@
             <v-text-field
               label="Confirm Password"
               type="password"
+              v-model = 'confirm_password'
               outlined
               required
             ></v-text-field>
@@ -111,23 +112,23 @@
     data: () => ({
       email: null,
       password: null,
+      confirm_password: null,
       username: null,
       loading: false,
       err: false,
       step: 1,
-      valid: true,
+      valid: false,
       emailRules: [
         v => !!v || 'Введите EMAIL',
         v => /.+@.+\..+/.test(v) || 'EMAIL в неверном формате',
       ],
       unameRules: [
         v => !!v || 'Введите логин',
-        v => (v && v.length <= 6) || 'Не менее 6 символов',
       ],
       pswdRules: [
         v => !!v || 'Введите пароль',
-        v => (v && v.length <= 6) || 'Не менее 6 символов',
-        v => (v === this.confirm_password) || 'Подтвердите пароль'
+        v => (v && v.length >= 6) || 'Не менее 6 символов',
+        v => (v === this.confirm_password) || 'd'
       ],
     }),
     methods: {

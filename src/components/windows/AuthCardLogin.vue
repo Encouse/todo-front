@@ -20,18 +20,22 @@
     <v-window v-model="step">
       <v-window-item :value="1">
         <v-card-text>
-          <v-text-field
-            label="username"
-            value="John"
-            outlined
-            v-model = 'username'
-          ></v-text-field>
-          <v-text-field
-            label="Password"
-            type="password"
-            outlined
-            v-model = 'password'
-          ></v-text-field>
+          <v-form v-model = 'valid'>
+            <v-text-field
+              label="username"
+              value="John"
+              outlined
+              v-model = 'username'
+              :rules = 'unameRules'
+            ></v-text-field>
+            <v-text-field
+              label="Password"
+              type = 'password'
+              outlined
+              v-model = 'password'
+              :rules = 'pswdRules'
+            ></v-text-field>
+          </v-form>
           <span class="caption grey--text text--darken-1">
             Введите пароль и логин выше
           </span>
@@ -74,12 +78,13 @@
         :disabled="step === 1 || loading"
         text
         @click="step--"
+        outlined
       >
         Back
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn
-        :disabled="step === 2 || loading"
+        :disabled="step === 2 || loading || !valid"
         color="primary"
         depressed
         outlined
@@ -99,6 +104,15 @@
       step: 1,
       err: false,
       loading: false,
+      valid: false,
+      unameRules: [
+        v => !!v || 'Введите логин',
+        v => (v && v.length >= 6) || 'Не менее 6 символов',
+      ],
+      pswdRules: [
+        v => !!v || 'Введите пароль',
+        v => (v && v.length >= 6) || 'Не менее 6 символов',
+      ],
     }),
     methods: {
       login: function () {
