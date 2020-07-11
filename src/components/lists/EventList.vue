@@ -13,7 +13,7 @@
         dark
       >
         <v-text-field
-          v-if = "pb"
+          v-if = "bp"
           v-model="search"
           clearable
           flat
@@ -72,7 +72,7 @@
         <template >
         <v-spacer></v-spacer>
           <v-select
-            v-if = "pb"
+            v-if = "bp"
             v-model="sortBy"
             flat
             dense
