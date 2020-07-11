@@ -30,7 +30,7 @@
       clipped-left
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>Events</v-toolbar-title>
+      <v-toolbar-title v-if = '$vuetify.breakpoint.mdAndUp'>Events</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         v-if = "token"
@@ -41,8 +41,8 @@
       >
       Выход
       </v-btn>
-      <div v-else>
       <v-btn
+        v-if = '!token'
         tile
         outlined
         text
@@ -51,6 +51,7 @@
       Регистрация
       </v-btn>
       <v-btn
+        v-if = '!token'
         tile
         outlined
         text
@@ -58,7 +59,6 @@
       >
       Вход
       </v-btn>
-    </div>
 
     </v-app-bar>
 

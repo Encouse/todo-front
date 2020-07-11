@@ -13,7 +13,7 @@
         dark
       >
         <v-text-field
-          v-if = "$vuetify.breakpoint.mdAndUp"
+          v-if = "pb"
           v-model="search"
           clearable
           flat
@@ -72,7 +72,7 @@
         <template >
         <v-spacer></v-spacer>
           <v-select
-            v-if = "$vuetify.breakpoint.mdAndUp"
+            v-if = "pb"
             v-model="sortBy"
             flat
             dense
@@ -219,12 +219,13 @@
 
     <template v-slot:footer>
       <v-row class="mt-2" align="center" justify="center">
-        <span class="grey--text">Items per page</span>
+        <span class="grey--text">{{bp ? 'Items per page' : ''}}</span>
         <v-menu offset-y>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
               dark
-              text
+              outlined
+              fab
               color="primary"
               class="ml-2"
               v-bind="attrs"
@@ -244,9 +245,7 @@
             </v-list-item>
           </v-list>
         </v-menu>
-
         <v-spacer></v-spacer>
-
         <span
           class="mr-4
           grey--text"
@@ -323,6 +322,7 @@ import ItemWindow from '@/components/windows/ItemWindow'
         sortDesc: false,
         page: 1,
         itemsPerPage: 4,
+        bp: this.$vuetify.breakpoint.mdAndUp,
         sortBy: 'Title',
         keys: [
           'Title',
