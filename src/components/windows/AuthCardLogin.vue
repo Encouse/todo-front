@@ -40,8 +40,29 @@
 
       <v-window-item :value="2">
         <div class="pa-4 text-center">
-          <h3 class="title font-weight-light mb-2">Спасибо что вы с нами!</h3>
-          <span class="caption grey--text">Thanks for signing up!</span>
+          <v-progress-circular
+            v-if = 'loading'
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
+          <v-btn
+            v-else
+            fab
+            large
+            error
+            outlined
+            top
+          >
+            <v-icon
+              color = 'error'
+            >mdi-close</v-icon>
+          </v-btn>
+          <h3 class="title font-weight-light mb-2">
+            {{err ? 'Неверный логин или пароль' : 'Спасибо что вы с нами!'}}
+          </h3>
+          <span class="caption grey--text">
+            {{err ? 'Wrong login or password' : 'Thanks for signing up!'}}
+          </span>
         </div>
       </v-window-item>
     </v-window>
@@ -50,7 +71,7 @@
 
     <v-card-actions>
       <v-btn
-        :disabled="step === 1"
+        :disabled="step === 1 || loading"
         text
         @click="step--"
       >
@@ -58,7 +79,7 @@
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn
-        :disabled="step === 3"
+        :disabled="step === 2 || loading"
         color="primary"
         depressed
         outlined
@@ -76,16 +97,23 @@
       password: null,
       username: null,
       step: 1,
+      err: false,
+      loading: false,
     }),
     methods: {
       login: function () {
+        this.loading = true
         let data = {
           password: this.password,
           username: this.username
         }
         this.$store.dispatch('login', data)
        .then(() => this.$router.push('/'))
-       .catch(err => console.log(err))
+       .catch(err => {
+         this.err = true
+         this.loading = false
+         console.log(err)
+       })
      },
      reg() {
        this.$emit('register')
@@ -97,7 +125,7 @@
           case 1: return 'Войти'
           default:
             this.login()
-            return 'Hello again!'
+            return this.err ? 'Повторите попытку' : 'Hello again!'
         }
       },
     },

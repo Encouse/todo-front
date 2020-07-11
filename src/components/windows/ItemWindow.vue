@@ -3,7 +3,7 @@
     <v-col>
           <v-card text max-width = '800'>
             <v-card-title>
-              {{'Редактировать'}}
+              {{create ? 'Создать' : 'Редактировать'}}
               <v-spacer></v-spacer>
               <v-btn
                 icon

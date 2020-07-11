@@ -11,9 +11,9 @@
     <template v-slot:header>
       <v-toolbar
         dark
-        class="mb-1"
       >
         <v-text-field
+          v-if = "$vuetify.breakpoint.mdAndUp"
           v-model="search"
           clearable
           flat
@@ -22,9 +22,57 @@
           hide-details
           label = 'Поиск'
         ></v-text-field>
-        <template v-if="$vuetify.breakpoint.mdAndUp">
+        <v-menu
+          v-else
+          v-model = 'searchmenu'
+          :close-on-content-click="false"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              v-on="on"
+              fab
+              x-small
+              dark
+            >
+              <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+          </template>
+            <v-card
+              height = '88'
+            >
+              <v-container>
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      v-model="search"
+                      clearable
+                      flat
+                      dense
+                      outlined
+                      hide-details
+                      label = 'Поиск'
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols = '2'>
+                    <v-btn
+                      fab
+                      x-small
+                      dark
+                      outlined
+                      @click = 'searchmenu = false'
+                    >
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+              </v-row>
+            </v-container>
+          </v-card>
+        </v-menu>
+        <template >
         <v-spacer></v-spacer>
           <v-select
+            v-if = "$vuetify.breakpoint.mdAndUp"
             v-model="sortBy"
             flat
             dense
@@ -33,6 +81,54 @@
             :items="keys"
             label="Сортировка"
           ></v-select>
+          <v-menu
+            v-else
+            v-model = 'sortmenu'
+            :close-on-content-click="false"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                fab
+                x-small
+                dark
+              >
+                <v-icon>mdi-sort</v-icon>
+              </v-btn>
+            </template>
+            <v-card
+              height = '88'
+            >
+              <v-container>
+                <v-row>
+                  <v-col>
+                    <v-select
+                      v-model="sortBy"
+                      flat
+                      dense
+                      outlined
+                      hide-details
+                      :items="keys"
+                      label="Сортировка"
+                      @click = "menu = false"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols = '2'>
+                    <v-btn
+                      fab
+                      x-small
+                      dark
+                      outlined
+                      @click = 'sortmenu = false'
+                    >
+                      <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                  </v-col>
+              </v-row>
+              </v-container>
+            </v-card>
+          </v-menu>
         <v-spacer></v-spacer>
           <v-btn-toggle
             v-model="sortDesc"
@@ -212,6 +308,8 @@ import ItemWindow from '@/components/windows/ItemWindow'
     data () {
       return {
         updateCounter: 0,
+        searchmenu: false,
+        sortmenu: false,
         overlay: false,
         create: false,
         detailItem: null,

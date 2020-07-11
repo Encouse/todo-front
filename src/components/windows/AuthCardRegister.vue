@@ -16,37 +16,53 @@
     <v-window v-model="step">
       <v-window-item :value="1">
         <v-card-text>
-          <v-text-field
-            outlined
-            label="Username"
-            value="john"
-            v-model = 'username'
-          ></v-text-field>
-          <v-text-field
-            label="Email"
-            outlined
-            value="john@vuetifyjs.com"
-            v-model = 'email'
-          ></v-text-field>
+          <v-form
+            v-model = 'valid'
+          >
+            <v-text-field
+              outlined
+              label="Username"
+              value="john"
+              v-model = 'username'
+              :rules = 'unameRules'
+              required
+            ></v-text-field>
+            <v-text-field
+              label="Email"
+              outlined
+              value="john@vuetifyjs.com"
+              v-model = 'email'
+              :rules = 'emailRules'
+              required
+            ></v-text-field>
+          </v-form>
           <span class="caption grey--text text--darken-1">
-            Enter your email and username above
+            Введите ваш EMAIL и логин выше
           </span>
         </v-card-text>
       </v-window-item>
 
       <v-window-item :value="2">
         <v-card-text>
-          <v-text-field
-            label="Password"
-            type="password"
-            outlined
-            v-model = 'password'
-          ></v-text-field>
-          <v-text-field
-            label="Confirm Password"
-            type="password"
-            outlined
-          ></v-text-field>
+          <v-form
+            ref = 'formp'
+            v-model = 'valid'
+          >
+            <v-text-field
+              label="Password"
+              type="password"
+              outlined
+              v-model = 'password'
+              :rules = 'pswdRules'
+              required
+            ></v-text-field>
+            <v-text-field
+              label="Confirm Password"
+              type="password"
+              outlined
+              required
+            ></v-text-field>
+          </v-form>
           <span class="caption grey--text text--darken-1">
             Введите пароль
           </span>
@@ -55,6 +71,10 @@
 
       <v-window-item :value="3">
         <div class="pa-4 text-center">
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
           <h3 class="title font-weight-light mb-2">Спасибо что вы с нами!</h3>
           <span class="caption grey--text">Thanks for signing up!</span>
         </div>
@@ -65,18 +85,20 @@
 
     <v-card-actions>
       <v-btn
-        :disabled="step === 1"
+        :disabled="step === 1 & loading === true"
         text
         @click="step--"
+        outlined
       >
         Back
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn
-        :disabled="step === 3"
+        :disabled="step === 3 || loading === true || !valid"
         color="primary"
         depressed
         @click="step++"
+        outlined
       >
         Далее
       </v-btn>
@@ -90,10 +112,27 @@
       email: null,
       password: null,
       username: null,
+      loading: false,
+      err: false,
       step: 1,
+      valid: true,
+      emailRules: [
+        v => !!v || 'Введите EMAIL',
+        v => /.+@.+\..+/.test(v) || 'EMAIL в неверном формате',
+      ],
+      unameRules: [
+        v => !!v || 'Введите логин',
+        v => (v && v.length <= 6) || 'Не менее 6 символов',
+      ],
+      pswdRules: [
+        v => !!v || 'Введите пароль',
+        v => (v && v.length <= 6) || 'Не менее 6 символов',
+        v => (v === this.confirm_password) || 'Подтвердите пароль'
+      ],
     }),
     methods: {
      register: function () {
+       this.loading = true
        let data = {
          username: this.username,
          email: this.email,
@@ -101,18 +140,23 @@
        }
        this.$store.dispatch('register', data)
       .then(() => {
+        this.loading = false
         console.log('registered sucessfully!');
         this.$router.push('/')
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        this.err = true
+        this.loading = false
+        console.log(err)
+      })
     },
 
     },
     computed: {
       currentTitle () {
         switch (this.step) {
-          case 1: return 'Register'
-          case 2: return 'Create a password'
+          case 1: return 'Регистрация'
+          case 2: return 'Создайте пароль'
           default:
             this.register()
             return 'Account created'
