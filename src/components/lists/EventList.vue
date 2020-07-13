@@ -187,13 +187,17 @@
                 :key="index"
               >
                 <v-list-item-content :class="{ 'blue--text': sortBy === key }">
-                  {{ key }}:
+                  {{key === 'datetime_end' ? 'Дата начала' :
+                    key === 'Title' ? 'Заголовок' :
+                    key === 'Text' ? 'Текст' : key}}:
                 </v-list-item-content>
 
                 <v-list-item-content
                                     class="align-end"
                                     :class="{ 'blue--text': sortBy === key }">
-                                    {{ item[key.toLowerCase()] }}
+                                    {{ key === 'datetime_end' ?
+                                    new Date(item[key.toLowerCase()]).toString().slice(0, 24) :
+                                    item[key.toLowerCase()] }}
                                   </v-list-item-content>
               </v-list-item>
             </v-list>
