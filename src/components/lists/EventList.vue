@@ -78,7 +78,7 @@
             dense
             outlined
             hide-details
-            :items="keys"
+            :items="sortKeys"
             label="Сортировка"
           ></v-select>
           <v-menu
@@ -332,6 +332,11 @@ import ItemWindow from '@/components/windows/ItemWindow'
           'Title',
           'Text',
           'datetime_end'
+        ],
+        sortKeys: [
+          {text: 'Заголовок', value: 'Title'},
+          {text: 'Текст', value: 'Text'},
+          {text: 'Дата начала', value: 'datetime_end'},
         ],
         filterkeys: [
           'Этот месяц',
