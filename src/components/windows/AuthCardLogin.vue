@@ -4,9 +4,9 @@
     max-width="500"
   >
     <v-card-title class="title font-weight-regular justify-space-between">
-      <span>{{ currentTitle }} или
-        <span class = 'reg' @click = 'reg'>
-        Зарегистрироваться
+      <span>{{ currentTitle }}
+        <span v-if = 'step === 1' class = 'reg' @click = 'reg'>
+         или Зарегистрироваться
         </span>
       </span>
       <v-avatar
@@ -139,7 +139,7 @@
           case 1: return 'Войти'
           default:
             this.login()
-            return this.err ? 'Повторите попытку' : 'Hello again!'
+            return this.err ? 'Повторите попытку' : 'И снова здравствуйте!'
         }
       },
     },

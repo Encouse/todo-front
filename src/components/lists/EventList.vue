@@ -176,7 +176,7 @@
           md="4"
           lg="3"
         >
-          <v-card @click = 'openDetailItem(item)'>
+          <v-card class = 'item-card' @click = 'openDetailItem(item)'>
             <v-card-title class="subheading font-weight-bold">{{ item.title }}</v-card-title>
 
             <v-divider></v-divider>
@@ -202,7 +202,7 @@
         <v-col>
           <template>
             <div class="text-center">
-              <v-overlay :value="overlay">
+              <v-overlay :value="overlay" absolute>
                 <ItemWindow
                  :item = 'detailItem'
                  :create = 'create'
@@ -392,3 +392,8 @@ import ItemWindow from '@/components/windows/ItemWindow'
     },
   }
 </script>
+<style scoped>
+.item-card:hover {
+  opacity: 0.7;
+}
+</style>
